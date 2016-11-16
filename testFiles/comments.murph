@@ -1,0 +1,18 @@
+# The # character signifies a line comment
+# The ^ character signifies a multiline comment
+# and terminates when another ^ is found
+
+# let a = 77;
+let beta = 99;
+# print(beta); # This shouldn't print
+print(beta); # This should print
+
+# print(alpha);
+let alpha = 90;
+print(alpha); # This should also print
+
+^
+print(luz);
+kadlsjflkasf
+lkasjdflkasnf
+^

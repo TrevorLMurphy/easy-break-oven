@@ -1,0 +1,12 @@
+func newFunction(a, b, c) {
+    print(a);
+    print(b);
+    print(c);
+    func nestedFunction() {
+        print("a + c is...");
+        print(a + c);
+    }
+    nestedFunction();
+}
+
+newFunction(43, "hello", 78);

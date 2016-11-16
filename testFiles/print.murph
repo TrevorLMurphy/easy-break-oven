@@ -1,0 +1,8 @@
+let alpha = 56;
+print(alpha);
+
+let beta = 32;
+print(beta);
+
+let gamma = "Trevor is cool!";
+print(gamma);

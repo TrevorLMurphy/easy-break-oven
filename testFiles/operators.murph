@@ -1,0 +1,63 @@
+let alpha = 50;
+let beta = 40;
+
+print("The next print will print 5...");
+print(5);
+
+print("The next print will print 50, which is alpha...");
+print(alpha);
+
+print("The next print will print 40, which is beta...");
+print(beta);
+
+print("The next print will print 90, which is alpha plus beta...");
+print(alpha + beta);
+
+print("The next print will print 2, which is 50 / 25...");
+print(50 / 25);
+
+print("The next print will print 2000, which is alpha * beta (50 * 40)...");
+print(alpha * beta);
+
+print("Testing 100 - 50 / 50, should be 1");
+print(100 - 50 / 50);
+
+print("Testing 55 / 11 * 8, should be 40...");
+print(55 / 11 * 8);
+
+print("Testing 50 > 3, should be true...");
+print(50 > 3);
+
+print("Testing 4 > 50, should be false...");
+print(4 > 50);
+
+print("Testing 50 < 1000, should be true...");
+print(50 < 1000);
+
+print("Testing 100 < 32, should be false...");
+print(100 < 32);
+
+print("Testing 50 >= 32, should be true...");
+print(50 >= 32);
+
+print("Testing 50 >= 50, should be true...");
+print(50 >= 50);
+
+print("Testing 50 >= 400, should be false...");
+print(50 >= 400);
+
+print("Testing 23 <= 23, should be true...");
+print(23 <= 23);
+
+print("Testing 23 <= 100, should be true...");
+print(23 <= 100);
+
+print("Testing 100 <= 53, should be false...");
+print(100 <= 53);
+
+print("Testing 50 == 50, should be true...");
+print(50 == 50);
+
+print("Testing 50 == 51, should be false...");
+print(50 == 51);
+

@@ -1,0 +1,7 @@
+let alpha = 54;
+print("alpha should be 54...");
+print(alpha);
+
+alpha = 90;
+print("alpha should now be 90...");
+print(alpha);
