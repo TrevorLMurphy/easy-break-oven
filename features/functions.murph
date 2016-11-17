@@ -1,12 +1,25 @@
-func newFunction(a, b, c) {
+func newFunction(a, b) {
     print(a);
     print(b);
-    print(c);
     func nestedFunction() {
-        print("a + c is...");
-        print(a + c);
+       return a + b;
     }
-    nestedFunction();
+    print("a + b is ...");
+    return nestedFunction();
 }
 
-newFunction(43, "hello", 78);
+print(newFunction(43, 22));
+let alpha = newFunction;
+print(alpha(32, 12));
+
+
+func lambdaTest(a, b) {
+    return func (a, b) {
+               return a + b;
+           };
+}
+
+print(lambdaTest(54, 66));
+
+let alpha = lambdaTest;
+print(alpha(15, 15));

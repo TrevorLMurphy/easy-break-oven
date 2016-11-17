@@ -1,7 +1,8 @@
-let i = 10;
-while (i != 0) {
+func iter(i) {
     print(i);
-    i = i - 1;
+    if (i < 10) {
+        iter(i + 1);
+    }
 }
 
-print(i);
+iter(0);

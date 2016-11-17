@@ -1,0 +1,14 @@
+func fib(n) {
+    if (n <= 1) {
+        return n;
+    }
+    else {
+        return fib(n-1) + fib(n-2);
+    }
+}
+
+print("fib of 8 should be 21...");
+print(fib(8));
+
+print("fib of 6 should be 8...");
+print(fib(6));

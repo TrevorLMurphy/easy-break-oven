@@ -1,6 +1,7 @@
 import java.io.PushbackReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 public class Parser {
 
@@ -19,8 +20,7 @@ public class Parser {
 
     public Lexeme parse() {
         advance();
-        Lexeme tree = statements();
-        return tree;
+        return statements();
     }
 
     private boolean check(String type) {
@@ -65,7 +65,8 @@ public class Parser {
                 check("COMMENT") ||
                 ifPending() ||
                 whilePending() ||
-                funcDefPending();
+                funcDefPending() ||
+                returnPending();
     }
 
     private boolean blockPending() {
@@ -132,7 +133,6 @@ public class Parser {
         Lexeme tree = match("ASSIGN");
         tree.left = temp;
         tree.right = expression();
-        match("SEMI");
         return tree;
     }
 
@@ -142,7 +142,6 @@ public class Parser {
         match("OPAREN");
         tree.right = optArgList();
         match("CPAREN");
-        match("SEMI");
         return tree;
     }
 
@@ -154,7 +153,7 @@ public class Parser {
 
     private Lexeme argList() {
         Lexeme tree = new Lexeme("GLUE");
-        tree.left = unary();
+        tree.left = expression();
         if (check("COMMA")) {
             match("COMMA");
             tree.right = argList();
@@ -166,24 +165,45 @@ public class Parser {
         return unaryPending();
     }
 
+    private boolean returnPending() {
+        return check("RETURN");
+    }
+
+    private Lexeme returnStatement() {
+        Lexeme tree = match("RETURN");
+        tree.left = expression();
+        return tree;
+    }
+
     private Lexeme statement() {
         Lexeme tree = new Lexeme("STATEMENT");
         if (check("COMMENT")) {
             tree.left = match("COMMENT");
         } else if (varDefPending()) {
             tree.left = varDef();
+            match("SEMI");
         } else if (funcDefPending()) {
             tree.left = functionDef();
         } else if (printPending()) {
             tree.left = print();
+            match("SEMI");
         } else if (ifPending()) {
             tree.left = ifStatement();
         } else if (varPending()) {
             Lexeme temp = match("VARIABLE");
-            if (check("OPAREN")) tree.left = funcCall(temp);
-            else tree.left = varAssign(temp);
+            if (check("OPAREN")) {
+                tree.left = funcCall(temp);
+                match("SEMI");
+            }
+            else {
+                tree.left = varAssign(temp);
+                match("SEMI");
+            }
         } else if (whilePending()) {
             tree.left = whileLoop();
+        } else if (returnPending()) {
+            tree.left = returnStatement();
+            match("SEMI");
         }
         return tree;
     }
@@ -202,7 +222,6 @@ public class Parser {
         match("OPAREN");
         tree.right = expression();
         match("CPAREN");
-        match("SEMI");
         return tree;
     }
 
@@ -245,12 +264,32 @@ public class Parser {
                 check("OR");
     }
 
+    private Lexeme arrayAccess() {
+        Lexeme tree = new Lexeme("ARRAY_ACCESS");
+        match("OBRACK");
+        tree.right = match("INTEGER");
+        match("CBRACK");
+        return tree;
+    }
+
     private Lexeme expression() {
-        Lexeme tree = unary();
+        Lexeme tree;
+        if (funcDefPending()) {
+            tree = functionDef();
+            return tree;
+        }
+        tree = unary();
+        if (check("OBRACK")) {
+            Lexeme temp = arrayAccess();
+            temp.left = tree;
+            tree = temp;
+        } else if (check("OPAREN")) {
+            tree = funcCall(tree);
+        }
         while (operatorPending()) {
             Lexeme temp = operator();
             temp.left = tree;
-            temp.right = unary();
+            temp.right = expression();
             tree = temp;
         }
         return tree;
@@ -264,12 +303,12 @@ public class Parser {
         Lexeme tree = match("FUNCTION");
         if (check("VARIABLE")) {
             tree.left = match("VARIABLE");
+        }
             match("OPAREN");
             tree.right = new Lexeme("GLUE");
             tree.right.left = optParameterList();
             match("CPAREN");
             tree.right.right = block();
-        }
         return tree;
     }
 
@@ -297,16 +336,29 @@ public class Parser {
         return check("VARIABLE");
     }
 
+    private boolean arrayPending() {
+        return check("OBRACK");
+    }
+
     private Lexeme varDef() {
         Lexeme tree = match("LET");
         tree.left = match("VARIABLE");
         match("ASSIGN");
-        if (funcDefPending()) {
-            tree.right = functionDef();
+        if (arrayPending()) {
+            match("OBRACK");
+            ArrayList<Lexeme> array = new ArrayList<Lexeme>();
+            while (true) {
+                if (unaryPending()) array.add(unary());
+                if (!check("COMMA")) {
+                    match("CBRACK");
+                    tree.right = new Lexeme ("ARRAY", array);
+                    break;
+                }
+                match("COMMA");
+            }
         } else {
             tree.right = expression();
         }
-        match("SEMI");
         return tree;
     }
 }

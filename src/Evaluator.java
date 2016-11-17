@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Evaluator {
 
@@ -12,13 +13,13 @@ public class Evaluator {
             return null;
         }
         switch (tree.type) {
-            case "STATEMENTS":
-                eval(tree.left, env);
-                return eval(tree.right, env);
+            case "STATEMENTS": return evalStatements(tree, env);
             case "STATEMENT": return eval(tree.left, env);
             case "COMMENT": return null;
-            case "INTEGER": return tree;
-            case "STRING": return tree;
+            case "INTEGER":
+            case "STRING":
+            case "ARRAY": return tree;
+            case "ARRAY_ACCESS": return evalArray(tree, env);
             case "VARIABLE": return e.lookupEnv(tree, env);
             case "OPAREN": return eval(tree.right, env);
             case "PLUS":
@@ -39,12 +40,42 @@ public class Evaluator {
             case "IF": return evalIf(tree, env);
             case "WHILE": return evalWhile(tree, env);
             case "FUNC_CALL": return evalFuncCall(tree, env);
+            case "RETURN": return evalReturn(tree, env);
             case "PRINT": return evalPrint(tree.right, env);
             default:
                 System.out.println("BAD EXPRESSION!");
                 System.exit(0);
         }
         return null;
+    }
+
+    private Lexeme evalStatements(Lexeme tree, Lexeme env) {
+        Lexeme statements = tree;
+        Lexeme currentStatement = tree.left;
+        Lexeme result = null;
+        while (currentStatement != null) {
+            result = eval(currentStatement, env);
+            if (result != null) {
+                return result;
+            }
+            statements = statements.right;
+            currentStatement = statements.left;
+        }
+        return result;
+    }
+
+    private Lexeme evalReturn(Lexeme tree, Lexeme env) {
+        return eval(tree.left, env);
+    }
+
+    private Lexeme evalArray(Lexeme tree, Lexeme env) {
+        int index = eval(tree.right, env).intVal;
+        ArrayList array = (eval(tree.left, env).arrayVal);
+        if (index >= array.size()) {
+            System.out.println("Index out of bounds!");
+            System.exit(0);
+        }
+        return (Lexeme) array.get(index);
     }
 
     private Lexeme evalPrint(Lexeme tree, Lexeme env) {
@@ -104,26 +135,32 @@ public class Evaluator {
         Lexeme elseStatement = tree.right;
         Lexeme local = e.extendEnv(env, e.getVars(env), e.getVals(env));
         if (eval(ifExpression, local).boolVal) {
-            eval(ifBody, local);
+            return eval(ifBody, local);
         } else {
-            eval(elseStatement, local);
+            return eval(elseStatement, local);
         }
-        return null;
     }
 
     private Lexeme evalFuncDef(Lexeme tree, Lexeme env) {
+        if (tree.left == null) {
+            return evalLambda(tree, env);
+        }
         Lexeme closure = e.cons("CLOSURE", env, tree);
         e.insert(tree.left, closure, env);
         return null;
     }
 
+    private Lexeme evalLambda(Lexeme tree, Lexeme env) {
+        Lexeme args = e.getVals(env);
+        Lexeme params = tree.right.left;
+        Lexeme body = tree.right.right;
+        Lexeme local = e.extendEnv(env, params, args);
+        return eval(body, local);
+    }
+
     private Lexeme evalArgs(Lexeme args, Lexeme env) {
         if (args == null) return null;
-        args.left = eval(args.left, env);
-        if (args.right != null) {
-            args.right = evalArgs(args.right, env);
-        }
-        return args;
+        return e.cons("GLUE", eval(args.left, env), evalArgs(args.right, env));
     }
 
     private Lexeme evalFuncCall(Lexeme tree, Lexeme env) {

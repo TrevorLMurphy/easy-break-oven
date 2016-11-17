@@ -4,7 +4,7 @@ import java.io.PushbackReader;
 public class Lexer {
 
     private PushbackReader reader;
-    public int lineNumber;
+    int lineNumber;
 
     public Lexer(PushbackReader reader) {
         this.reader = reader;
@@ -49,6 +49,10 @@ public class Lexer {
                     return new Lexeme("OBRACE");
                 case '}':
                     return new Lexeme("CBRACE");
+                case '[':
+                    return new Lexeme("OBRACK");
+                case ']':
+                    return new Lexeme("CBRACK");
                 case ';':
                     return new Lexeme("SEMI");
                 default:
@@ -66,7 +70,7 @@ public class Lexer {
     }
 
     public Lexeme skipComment(int r) throws IOException {
-        while (r != 10) { // Read until end of line
+        while (r != 10 && r != -1) { // Read until end of line
             r = reader.read();
         }
         return new Lexeme("COMMENT");

@@ -8,7 +8,7 @@ public class Lexeme {
     private String strVal;
     int intVal;
     boolean boolVal;
-    private ArrayList arrayVal;
+    ArrayList<Lexeme> arrayVal;
     private String varVal;
 
     String type;
@@ -59,7 +59,7 @@ public class Lexeme {
      * @param type Type of Lexeme
      * @param arrayVal Array Value
      */
-    public Lexeme(String type, ArrayList arrayVal) {
+    public Lexeme(String type, ArrayList<Lexeme> arrayVal) {
         this.type = type;
         this.arrayVal = arrayVal;
     }
