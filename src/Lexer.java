@@ -78,7 +78,7 @@ public class Lexer {
         while (ch != '^') {
             if (r == -1) {
                 System.out.println("YOU'RE MISSING THE ENDING ^ FOR YOUR BLOCK COMMENT ON LINE " + lineNumber);
-                System.exit(-1);
+                System.exit(0);
             }
             r = reader.read();
             ch = (char) r;
@@ -137,7 +137,7 @@ public class Lexer {
         while (ch != '\"') {
             if (r == -1) {
                 System.out.println("YOU'RE MISSING AN END QUOTE ON LINE " + lineNumber);
-                System.exit(-1);
+                System.exit(0);
             }
             newString += ch;
             r = reader.read();

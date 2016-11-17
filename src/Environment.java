@@ -55,7 +55,7 @@ public class Environment {
         }
 
         System.out.println("VARIABLE: " + variable + " is undefined :(");
-        System.exit(-1);
+        System.exit(0);
         return null;
     }
 
@@ -75,7 +75,7 @@ public class Environment {
         }
 
         System.out.println("VARIABLE: " + variable + " is undefined :(");
-        System.exit(-1);
+        System.exit(0);
         return null;
     }
 

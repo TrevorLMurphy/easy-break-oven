@@ -41,8 +41,12 @@ public class Parser {
     private void matchNoAdvance(String type) {
         if (!check(type)) {
             System.out.println("SYNTAX ERROR: Line " + lexer.lineNumber);
-            System.out.println("GOT " + type + "..." + "NEEDED " + lexeme.type);
-            System.exit(-1);
+            if (type.equals("SEMI")) {
+                System.out.println("Looks like you're missing a semicolon!");
+            } else {
+                System.out.println("GOT " + type + "..." + "NEEDED " + lexeme.type);
+            }
+            System.exit(0);
         }
     }
 

@@ -42,7 +42,7 @@ public class Evaluator {
             case "PRINT": return evalPrint(tree.right, env);
             default:
                 System.out.println("BAD EXPRESSION!");
-                System.exit(-1);
+                System.exit(0);
         }
         return null;
     }
@@ -68,7 +68,7 @@ public class Evaluator {
             case "NOTEQUAL": return new Lexeme("BOOLEAN", left.intVal != right.intVal);
             default:
                 System.out.println("Defaulted on the evalOperator function for some reason...");
-                System.exit(-1);
+                System.exit(0);
                 return null;
         }
     }
