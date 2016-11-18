@@ -1,7 +1,10 @@
 let jello = ["hello", "this", "is", "an", "array"];
 let multiValued = ["string", 5, "anotherString", 67];
 
+print("The jello array is...");
 print(jello);
+
+print("The multiValued array is...");
 print(multiValued);
 
 print("The 1st value of multiValued...");
@@ -9,10 +12,3 @@ print(multiValued[0]);
 
 print("The 4th value of jello...");
 print(jello[3]);
-
-^
-func fib(n) {
-    if (n <= 1) return n;
-    else return fib(n-1) + fib(n-2);
-}
-^

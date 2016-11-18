@@ -70,3 +70,7 @@ dictionary:
 	cat features/dictionary.murph
 dictionaryx:
 	./dpl features/dictionary.murph
+
+problem:
+	cat features/problem.murph
+	./dpl features/problem.murph
