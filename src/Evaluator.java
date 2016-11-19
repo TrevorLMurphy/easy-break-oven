@@ -18,6 +18,8 @@ public class Evaluator {
             case "COMMENT": return null;
             case "INTEGER":
             case "STRING":
+            case "BOOLEAN":
+            case "NULL":
             case "ARRAY": return tree;
             case "ARRAY_ACCESS": return evalArray(tree, env);
             case "VARIABLE": return e.lookupEnv(tree, env);
@@ -41,11 +43,22 @@ public class Evaluator {
             case "WHILE": return evalWhile(tree, env);
             case "FUNC_CALL": return evalFuncCall(tree, env);
             case "RETURN": return evalReturn(tree, env);
-            case "PRINT": return evalPrint(tree.right, env);
+            case "DOT": return evalDot(tree, env);
             default:
                 System.out.println("BAD EXPRESSION!");
                 System.exit(0);
         }
+        return null;
+    }
+
+    private Lexeme evalAdd(Lexeme tree) {
+        Lexeme array = tree.left;
+        Lexeme newItem = tree.right.left;
+        array.arrayVal.add(newItem);
+        return null;
+    }
+
+    private Lexeme evalPop(Lexeme tree) {
         return null;
     }
 
@@ -78,8 +91,23 @@ public class Evaluator {
         return (Lexeme) array.get(index);
     }
 
-    private Lexeme evalPrint(Lexeme tree, Lexeme env) {
-        System.out.println(eval(tree, env));
+    private Lexeme evalPrintln(Lexeme eargs) {
+        Lexeme arg;
+        while (eargs != null) {
+            arg = eargs.left;
+            System.out.println(arg);
+            eargs = eargs.right;
+        }
+        return null;
+    }
+
+    private Lexeme evalPrint(Lexeme eargs) {
+        Lexeme arg;
+        while (eargs != null) {
+            arg = eargs.left;
+            System.out.print(arg + " ");
+            eargs = eargs.right;
+        }
         return null;
     }
 
@@ -87,16 +115,35 @@ public class Evaluator {
         Lexeme left = eval(tree.left, env);
         Lexeme right = eval(tree.right, env);
         switch (tree.type) {
-            case "PLUS": return new Lexeme("INTEGER", left.intVal + right.intVal);
-            case "MINUS": return new Lexeme("INTEGER", left.intVal - right.intVal);
-            case "MULT": return new Lexeme("INTEGER", left.intVal * right.intVal);
-            case "DIVIDE": return new Lexeme("INTEGER", left.intVal / right.intVal);
-            case "GEQUAL": return new Lexeme("BOOLEAN", left.intVal >= right.intVal);
-            case "GREATER": return new Lexeme("BOOLEAN", left.intVal > right.intVal);
-            case "LESS": return new Lexeme("BOOLEAN", left.intVal < right.intVal);
-            case "LEQUAL": return new Lexeme("BOOLEAN", left.intVal <= right.intVal);
-            case "EQUAL": return new Lexeme("BOOLEAN", left.intVal == right.intVal);
-            case "NOTEQUAL": return new Lexeme("BOOLEAN", left.intVal != right.intVal);
+            case "PLUS":
+                if (left.isInt()) return new Lexeme("INTEGER", left.intVal + right.intVal);
+            case "MINUS":
+                if (left.isInt()) return new Lexeme("INTEGER", left.intVal - right.intVal);
+            case "MULT":
+                if (left.isInt()) return new Lexeme("INTEGER", left.intVal * right.intVal);
+            case "DIVIDE":
+                if (left.isInt()) return new Lexeme("INTEGER", left.intVal / right.intVal);
+            case "GEQUAL":
+                if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal >= right.intVal);
+            case "GREATER":
+                if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal > right.intVal);
+            case "LESS":
+                if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal < right.intVal);
+            case "LEQUAL":
+                if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal <= right.intVal);
+            case "EQUAL":
+                if (left.isInt()) {
+                    return new Lexeme("BOOLEAN", left.intVal == right.intVal);
+                } else {
+                    return new Lexeme("BOOLEAN", left.type.equals(right.type));
+                }
+            case "NOTEQUAL":
+                if (left.isInt()) {
+                    return new Lexeme("BOOLEAN", left.intVal != right.intVal);
+                } else {
+                    return new Lexeme("BOOLEAN", !left.type.equals(right.type));
+                }
+
             default:
                 System.out.println("Defaulted on the evalOperator function for some reason...");
                 System.exit(0);
@@ -113,9 +160,16 @@ public class Evaluator {
     }
 
     private Lexeme evalVarAssign(Lexeme tree, Lexeme env) {
-        Lexeme var = tree.left;
-        Lexeme val = eval(tree.right, env); // This could be an expression, so evaluate it.
-        e.updateEnv(var, val, env);
+        Lexeme result = eval(tree.right, env);
+        if (tree.left.type.equals("VARIABLE")) {
+            e.updateEnv(tree.left, result, env);
+        } else if (tree.left.type.equals("DOT")) {
+            Lexeme object = eval(tree.left.left, env);
+            e.updateEnv(tree.left.right, result, object);
+        } else {
+            System.out.println("THIS ASSIGNMENT DOESN'T WORK!");
+            System.exit(0);
+        }
         return null;
     }
 
@@ -164,13 +218,26 @@ public class Evaluator {
     }
 
     private Lexeme evalFuncCall(Lexeme tree, Lexeme env) {
-        Lexeme closure = eval(tree.left, env);
+        String funcName = "";
+        if (tree.left != null) funcName = tree.left.varVal;
         Lexeme args = tree.right;
+        Lexeme eargs = evalArgs(args, env);
+        switch (funcName) {
+            case "print":
+                return evalPrint(eargs);
+            case "println":
+                return evalPrintln(eargs);
+            case "addItem":
+                return evalAdd(eargs);
+        }
+        Lexeme closure = eval(tree.left, env);
+
         Lexeme params = closure.right.right.left;
         Lexeme body = closure.right.right.right;
         Lexeme senv = closure.left;
-        Lexeme eargs = evalArgs(args, env);
+
         Lexeme xenv = e.extendEnv(senv, params, eargs);
+        e.insert(new Lexeme("VARIABLE", "this"), xenv, xenv);
         return eval(body, xenv);
     }
 
@@ -178,5 +245,10 @@ public class Evaluator {
         Lexeme val = eval(tree.right, env);
         e.insert(tree.left, val, env);
         return null;
+    }
+
+    private Lexeme evalDot(Lexeme tree, Lexeme env) {
+        Lexeme object = eval(tree.left, env);
+        return eval(tree.right, object);
     }
 }

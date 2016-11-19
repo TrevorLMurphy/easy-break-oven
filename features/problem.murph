@@ -1,1 +1,38 @@
-print("RPN calc not implemented yet!");
+func node(val, next) {
+    return this;
+}
+
+func stack(head, size) {
+
+    func push(newNode) {
+        newNode.next = head;
+        head = newNode;
+    }
+
+    func pop() {
+        head = head.next;
+    }
+
+    func printStack() {
+        let iter = head;
+        while (iter != null) {
+            print(iter.val);
+            iter = iter.next;
+        }
+    }
+
+    return this;
+}
+
+let s = stack(null, 0);
+
+let i = 0;
+let newNode = null;
+while (i < 11) {
+    newNode = node(i, null);
+    s.push(newNode);
+    i = i + 1;
+}
+
+s.printStack();
+

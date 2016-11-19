@@ -1,0 +1,25 @@
+func node(value, next) {
+    func getNext() { return next; }
+    return this;
+}
+
+let n = node(55, null);
+let nn = node(56, n);
+let nnn = node(57, nn);
+let nnnn = node(58, nnn);
+
+let a = nnnn.next;
+let b = a.next;
+let c = b.next;
+let d = c.next;
+
+let iter = nnnn;
+
+while (iter != null) {
+    print(iter.value);
+    iter = iter.next;
+}
+
+print(nn.getNext().value);
+
+

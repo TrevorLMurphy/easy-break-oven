@@ -5,11 +5,11 @@ import java.util.ArrayList;
  */
 public class Lexeme {
 
-    private String strVal;
+    String strVal;
     int intVal;
     boolean boolVal;
     ArrayList<Lexeme> arrayVal;
-    private String varVal;
+    String varVal;
 
     String type;
     Lexeme left = null;
@@ -74,6 +74,10 @@ public class Lexeme {
         this.type = type;
         this.left = left;
         this.right = right;
+    }
+
+    boolean isInt() {
+        return this.type.equals("INTEGER");
     }
 
     @Override

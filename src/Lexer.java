@@ -34,6 +34,8 @@ public class Lexer {
                     return new Lexeme("CPAREN");
                 case ',':
                     return new Lexeme("COMMA");
+                case '.':
+                    return new Lexeme("DOT");
                 case '+':
                 case '*':
                 case '-':
@@ -192,10 +194,10 @@ public class Lexer {
                 return new Lexeme("TRUE");
             case "false":
                 return new Lexeme("FALSE");
-            case "print":
-                return new Lexeme("PRINT");
             case "return":
                 return new Lexeme("RETURN");
+            case "null":
+                return new Lexeme("NULL");
             default:
                 return new Lexeme("VARIABLE", key);
         }
