@@ -4,19 +4,21 @@ func node(val, next) {
 
 func stack(head, size) {
 
-    func push(newNode) {
-        newNode.next = head;
-        head = newNode;
+    func push(val) {
+        let n = node(val, head);
+        head = n;
     }
 
     func pop() {
+        let returnValue = head.val;
         head = head.next;
+        return returnValue;
     }
 
-    func printStack() {
+    func display() {
         let iter = head;
         while (iter != null) {
-            print(iter.val);
+            println(iter.val);
             iter = iter.next;
         }
     }
@@ -24,15 +26,30 @@ func stack(head, size) {
     return this;
 }
 
-let s = stack(null, 0);
+let input = read();
 
 let i = 0;
-let newNode = null;
-while (i < 11) {
-    newNode = node(i, null);
-    s.push(newNode);
+let s = stack(null, 0);
+while (i < length(input)) {
+    if (type(input[i]) == "INTEGER") {
+        s.push(input[i]);
+    } else {
+        let a = s.pop();
+        let b = s.pop();
+        if (type(input[i]) == "MULT") {
+            s.push(b * a);
+        } else if (type(input[i]) == "PLUS") {
+            s.push(b + a);
+        } else if (type(input[i]) == "MINUS") {
+            s.push(b - a);
+        } else if (type(input[i]) == "DIVIDE") {
+            s.push(b / a);
+        } else if (type(input[i]) == "RAISE") {
+            s.push(b ** a);
+        } else {
+            println("THIS OPERATION IS NOT PERMITTED");
+        }
+    }
     i = i + 1;
 }
-
-s.printStack();
-
+s.display();

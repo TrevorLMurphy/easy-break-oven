@@ -73,4 +73,4 @@ dictionaryx:
 
 problem:
 	cat features/problem.murph
-	./dpl features/problem.murph
+	cat features/anotherTest | ./dpl features/problem.murph

@@ -162,6 +162,7 @@ public class Lexer {
             case "+": return new Lexeme("PLUS");
             case "-": return new Lexeme("MINUS");
             case "*": return new Lexeme("MULT");
+            case "**": return new Lexeme("RAISE");
             case "/": return new Lexeme("DIVIDE");
             case ">": return new Lexeme("GREATER");
             case ">=": return new Lexeme("GEQUAL");

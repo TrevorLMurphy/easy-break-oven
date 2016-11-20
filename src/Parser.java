@@ -278,13 +278,14 @@ public class Parser {
                 check("LESS") ||
                 check("LEQUAL") ||
                 check("AND") ||
-                check("OR");
+                check("OR") ||
+                check("RAISE");
     }
 
     private Lexeme arrayAccess() {
         Lexeme tree = new Lexeme("ARRAY_ACCESS");
         match("OBRACK");
-        tree.right = match("INTEGER");
+        tree.right = unary();
         match("CBRACK");
         return tree;
     }

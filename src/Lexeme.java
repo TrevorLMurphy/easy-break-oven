@@ -30,7 +30,7 @@ public class Lexeme {
      */
     public Lexeme(String type, String varOrStringVal) {
         this.type = type;
-        if (varOrStringVal.startsWith("\"")) this.strVal = varOrStringVal;
+        if (varOrStringVal.startsWith("\"")) this.strVal = varOrStringVal.replace("\"", "");
         else this.varVal = varOrStringVal;
     }
 
@@ -79,12 +79,15 @@ public class Lexeme {
     boolean isInt() {
         return this.type.equals("INTEGER");
     }
+    boolean isString() {
+        return this.type.equals("STRING");
+    }
 
     @Override
     public String toString() {
         switch (this.type) {
             case "STRING":
-                return this.strVal.replace("\"", "");
+                return this.strVal;
             case "INTEGER":
                 return Integer.toString(this.intVal);
             case "BOOLEAN":
@@ -98,5 +101,7 @@ public class Lexeme {
                 return this.type.toUpperCase();
         }
     }
+
+
 }
 

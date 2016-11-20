@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Evaluator {
@@ -33,6 +34,7 @@ public class Evaluator {
             case "GEQUAL":
             case "LEQUAL":
             case "NOTEQUAL":
+            case "RAISE":
             case "EQUAL": return evalOperator(tree, env);
             case "AND": return evalAnd(tree, env);
             case "OR": return evalOr(tree, env);
@@ -91,6 +93,65 @@ public class Evaluator {
         return (Lexeme) array.get(index);
     }
 
+    private Lexeme evalLength(Lexeme eargs) {
+        switch (eargs.left.type) {
+            case "STRING":
+                return new Lexeme("INTEGER", eargs.left.strVal.length());
+            case "ARRAY":
+                return new Lexeme("INTEGER", eargs.left.arrayVal.size());
+            default:
+                System.out.println("TRYING TO TAKE LENGTH OF TYPE " + eargs.left.type + " DOES NOT WORK!");
+                System.exit(0);
+                return null;
+        }
+    }
+
+    private Lexeme evalReadInput(Lexeme eargs) {
+        if (eargs != null) {
+            System.out.println("ERROR: READ DOES NOT TAKE ANY ARGUMENTS!");
+            System.exit(0);
+        }
+        ArrayList<Lexeme> inputArray = new ArrayList<>();
+        int ch;
+        try {
+            while ((ch = System.in.read()) != -1) {
+                if (ch != '\n' && ch != '\r') {
+                    switch (ch) {
+                        case '^':
+                            inputArray.add(new Lexeme("RAISE"));
+                            break;
+                        case '+':
+                            inputArray.add(new Lexeme("PLUS"));
+                            break;
+                        case '*':
+                            inputArray.add(new Lexeme("MULT"));
+                            break;
+                        case '-':
+                            inputArray.add(new Lexeme("MINUS"));
+                            break;
+                        case '/':
+                            inputArray.add(new Lexeme("DIVIDE"));
+                            break;
+                        default:
+                            if (Character.isDigit(ch)) {
+                                String num = "";
+                                while (Character.isDigit(ch) && ch != -1) {
+                                    num += (char) ch;
+                                    ch = System.in.read();
+                                }
+                                inputArray.add(new Lexeme("INTEGER", Integer.parseInt(num)));
+                            }
+                            break;
+                    }
+                }
+            }
+            return new Lexeme("ARRAY", inputArray);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return null;
+    }
+
     private Lexeme evalPrintln(Lexeme eargs) {
         Lexeme arg;
         while (eargs != null) {
@@ -121,6 +182,8 @@ public class Evaluator {
                 if (left.isInt()) return new Lexeme("INTEGER", left.intVal - right.intVal);
             case "MULT":
                 if (left.isInt()) return new Lexeme("INTEGER", left.intVal * right.intVal);
+            case "RAISE":
+                if (left.isInt()) return new Lexeme("INTEGER", (int) Math.pow(left.intVal, right.intVal));
             case "DIVIDE":
                 if (left.isInt()) return new Lexeme("INTEGER", left.intVal / right.intVal);
             case "GEQUAL":
@@ -134,6 +197,8 @@ public class Evaluator {
             case "EQUAL":
                 if (left.isInt()) {
                     return new Lexeme("BOOLEAN", left.intVal == right.intVal);
+                } else if (left.isString()) {
+                    return new Lexeme("BOOLEAN", left.strVal.equals(right.strVal));
                 } else {
                     return new Lexeme("BOOLEAN", left.type.equals(right.type));
                 }
@@ -229,6 +294,12 @@ public class Evaluator {
                 return evalPrintln(eargs);
             case "addItem":
                 return evalAdd(eargs);
+            case "length":
+                return evalLength(eargs);
+            case "read":
+                return evalReadInput(eargs);
+            case "type":
+                return evalType(eargs);
         }
         Lexeme closure = eval(tree.left, env);
 
@@ -241,6 +312,10 @@ public class Evaluator {
         return eval(body, xenv);
     }
 
+    private Lexeme evalType(Lexeme eargs) {
+        return new Lexeme("STRING", "\"" + eargs.left.type + "\"");
+    }
+
     private Lexeme evalVarDef(Lexeme tree, Lexeme env) {
         Lexeme val = eval(tree.right, env);
         e.insert(tree.left, val, env);
@@ -249,6 +324,7 @@ public class Evaluator {
 
     private Lexeme evalDot(Lexeme tree, Lexeme env) {
         Lexeme object = eval(tree.left, env);
-        return eval(tree.right, object);
+        Lexeme local = e.extendEnv(object, e.getVars(env), e.getVals(env));
+        return eval(tree.right, local);
     }
 }
