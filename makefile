@@ -1,8 +1,8 @@
-#general make command
+# ALL
 all: Lexeme.class Lexer.class Parser.class Environment.class Evaluator.class Main.class
 	chmod +x dpl
 
-#files to compile
+# Compilation
 Lexeme.class: src/Lexeme.java
 	javac -d . -classpath . src/Lexeme.java
 
@@ -21,11 +21,11 @@ Evaluator.class: src/Evaluator.java
 Main.class: src/Main.java
 	javac -d . -classpath . src/Main.java
 
-#clean the .class files
+# Remove class files
 clean:
 	rm -f *.class
 
-# tests
+# Tests
 error1:
 	cat features/error1.murph
 error1x:
@@ -73,4 +73,14 @@ dictionaryx:
 
 problem:
 	cat features/problem.murph
-	cat features/anotherTest | ./dpl features/problem.murph
+execute = ./dpl features/problem.murph
+problemx:
+	cat features/testInput0 | $(execute)
+problemx-1:
+	cat features/testInput1 | $(execute)
+problemx-2:
+	cat features/testInput2 | $(execute)
+problemx-3:
+	cat features/testInput3 | $(execute)
+problemx-4:
+	cat features/testInput4 | $(execute)
