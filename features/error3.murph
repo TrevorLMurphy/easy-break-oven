@@ -1,6 +1,6 @@
 let beta = 65;
 
-print(beta + 56);
+println(beta + 56);
 
 ^
 I'm going to write a

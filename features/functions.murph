@@ -1,16 +1,16 @@
 func newFunction(a, b) {
-    print(a);
-    print(b);
+    println(a);
+    println(b);
     func nestedFunction() {
        return a + b;
     }
-    print("a + b is ...");
+    println("a + b is ...");
     return nestedFunction();
 }
 
-print(newFunction(43, 22));
+println(newFunction(43, 22));
 let alpha = newFunction;
-print(alpha(32, 12));
+println(alpha(32, 12));
 
 
 func lambdaTest(a, b) {
@@ -19,7 +19,7 @@ func lambdaTest(a, b) {
            };
 }
 
-print(lambdaTest(54, 66));
+println(lambdaTest(54, 66));
 
 let alpha = lambdaTest;
-print(alpha(15, 15));
+println(alpha(15, 15));

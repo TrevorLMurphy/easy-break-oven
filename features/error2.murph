@@ -1,2 +1,2 @@
-print("This is missing a semicolon!")
-print("Missing semicolon :(");
+println("This is missing a semicolon!")
+println("Missing semicolon :(");

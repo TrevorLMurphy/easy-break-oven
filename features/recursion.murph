@@ -7,8 +7,8 @@ func fib(n) {
     }
 }
 
-print("fib of 8 should be 21...");
-print(fib(8));
+println("fib of 8 should be 21...");
+println(fib(8));
 
-print("fib of 6 should be 8...");
-print(fib(6));
+println("fib of 6 should be 8...");
+println(fib(6));

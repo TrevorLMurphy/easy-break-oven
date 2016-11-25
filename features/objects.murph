@@ -19,7 +19,4 @@ while (iter != null) {
     print(iter.value);
     iter = iter.next;
 }
-
-print(nn.getNext().value);
-
-
+println();

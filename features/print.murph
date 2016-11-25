@@ -1,8 +1,8 @@
 let alpha = 56;
-print(alpha);
+println(alpha);
 
 let beta = 32;
-print(beta);
+println(beta);
 
 let gamma = "Trevor is cool!";
-print(gamma);
+println(gamma);

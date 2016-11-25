@@ -53,6 +53,8 @@ public class Evaluator {
         return null;
     }
 
+
+    // Array evals
     private Lexeme evalAdd(Lexeme tree) {
         Lexeme array = tree.left;
         Lexeme newItem = tree.right.left;
@@ -60,8 +62,24 @@ public class Evaluator {
         return null;
     }
 
-    private Lexeme evalPop(Lexeme tree) {
+    private Lexeme evalRemove(Lexeme tree) {
+        Lexeme array = tree.left;
+        Lexeme index = tree.right.left;
+        array.arrayVal.remove(index.intVal);
         return null;
+    }
+
+    private Lexeme evalLength(Lexeme eargs) {
+        switch (eargs.left.type) {
+            case "STRING":
+                return new Lexeme("INTEGER", eargs.left.strVal.length());
+            case "ARRAY":
+                return new Lexeme("INTEGER", eargs.left.arrayVal.size());
+            default:
+                System.out.println("TRYING TO TAKE LENGTH OF TYPE " + eargs.left.type + " DOES NOT WORK!");
+                System.exit(0);
+                return null;
+        }
     }
 
     private Lexeme evalStatements(Lexeme tree, Lexeme env) {
@@ -91,19 +109,6 @@ public class Evaluator {
             System.exit(0);
         }
         return (Lexeme) array.get(index);
-    }
-
-    private Lexeme evalLength(Lexeme eargs) {
-        switch (eargs.left.type) {
-            case "STRING":
-                return new Lexeme("INTEGER", eargs.left.strVal.length());
-            case "ARRAY":
-                return new Lexeme("INTEGER", eargs.left.arrayVal.size());
-            default:
-                System.out.println("TRYING TO TAKE LENGTH OF TYPE " + eargs.left.type + " DOES NOT WORK!");
-                System.exit(0);
-                return null;
-        }
     }
 
     private Lexeme evalReadInput(Lexeme eargs) {
@@ -153,6 +158,9 @@ public class Evaluator {
     }
 
     private Lexeme evalPrintln(Lexeme eargs) {
+        if (eargs == null) {
+            System.out.println();
+        }
         Lexeme arg;
         while (eargs != null) {
             arg = eargs.left;
@@ -292,8 +300,10 @@ public class Evaluator {
                 return evalPrint(eargs);
             case "println":
                 return evalPrintln(eargs);
-            case "addItem":
+            case "add":
                 return evalAdd(eargs);
+            case "remove":
+                return evalRemove(eargs);
             case "length":
                 return evalLength(eargs);
             case "read":

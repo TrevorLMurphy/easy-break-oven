@@ -2,4 +2,4 @@ func undefinedVariable() {
     let variable = "I can't be accessed outside of this scope!";
 }
 
-print(variable);
+println(variable);

@@ -1,14 +1,45 @@
 let jello = ["hello", "this", "is", "an", "array"];
 let multiValued = ["string", 5, "anotherString", 67];
 
-print("The jello array is...");
-print(jello);
+println("The jello array is...");
+println(jello);
 
-print("The multiValued array is...");
-print(multiValued);
+println();
 
-print("The 1st value of multiValued...");
-print(multiValued[0]);
+println("The multiValued array is...");
+println(multiValued);
 
-print("The 4th value of jello...");
-print(jello[3]);
+println();
+
+println("The 1st value of multiValued...");
+println(multiValued[0]);
+
+println();
+
+println("The 4th value of jello...");
+println(jello[3]);
+
+println();
+
+println("Size of jello is...");
+println(length(jello));
+
+println();
+
+println("Adding a new item to jello...");
+add(jello, "hello");
+println(jello);
+
+println();
+
+println("jello's new size should be 6...");
+println(length(jello));
+
+println();
+
+println("Removing 'this' from jello");
+remove(jello, 1);
+println(jello);
+
+println("Size of jello should be 5 again...");
+println(length(jello));

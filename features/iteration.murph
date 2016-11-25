@@ -5,4 +5,15 @@ func iter(i) {
     }
 }
 
+println("TESTING ITERATION...");
 iter(0);
+println();
+
+println("TESTING WHILE LOOP...");
+
+let i = 0;
+while (i <= 10) {
+    print(i);
+    i = i + 1;
+}
+println();

@@ -5,14 +5,14 @@
 # let a = 77;
 let beta = 99;
 # print(beta); # This shouldn't print
-print(beta); # This should print
+println(beta); # This should print
 
 # print(alpha);
 let alpha = 90;
-print(alpha); # This should also print
+println(alpha); # This should also print
 
 ^
-print(luz);
+println(luz);
 kadlsjflkasf
 lkasjdflkasnf
 ^
