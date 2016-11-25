@@ -4,25 +4,25 @@ let beta = 40;
 print("The next print will print 5 ...");
 println(5);
 
-print("The next print will print 50, which is alpha ...");
+print("The next print will print 50, which is alpha...");
 println(alpha);
 
-print("The next print will print 40, which is beta ...");
+print("The next print will print 40, which is beta...");
 println(beta);
 
-print("The next print will print 90, which is alpha plus beta ...");
+print("The next print will print 90, which is alpha plus beta...");
 println(alpha + beta);
 
-print("The next print will print 2, which is 50 / 25 ...");
+print("The next print will print 2, which is 50 / 25...");
 println(50 / 25);
 
-print("The next print will print 2000, which is alpha * beta (50 * 40) ...");
+print("The next print will print 2000, which is alpha * beta (50 * 40)...");
 println(alpha * beta);
 
-print("Testing 100 - 50 / 50, should be 1 ... ");
+print("Testing 100 - 50 / 50, should be 99...");
 println(100 - 50 / 50);
 
-print("Testing 55 / 11 * 8, should be 40...");
+print("Testing 55 / 11 * 8, should be 0...");
 println(55 / 11 * 8);
 
 print("Testing 50 > 3, should be true...");
@@ -60,3 +60,6 @@ println(50 == 50);
 
 print("Testing 50 == 51, should be false...");
 println(50 == 51);
+
+print("Testing 21 != 77, should be true...");
+println(21 != 77);

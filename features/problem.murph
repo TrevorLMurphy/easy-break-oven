@@ -1,9 +1,9 @@
-# Node object
+# Node Class
 func node(val, next) {
     return this;
 }
 
-# Stack object
+# Stack Class
 func stack(head, size) {
 
     func push(val) {

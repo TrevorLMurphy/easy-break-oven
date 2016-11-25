@@ -51,6 +51,11 @@ conditionals:
 conditionalsx:
 	./dpl features/conditionals.murph
 
+operators:
+	cat features/operators.murph
+operatorsx:
+	./dpl features/operators.murph
+
 recursion:
 	cat features/recursion.murph
 recursionx:

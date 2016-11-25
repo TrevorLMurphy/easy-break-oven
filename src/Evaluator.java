@@ -208,13 +208,15 @@ public class Evaluator {
                 } else if (left.isString()) {
                     return new Lexeme("BOOLEAN", left.strVal.equals(right.strVal));
                 } else {
-                    return new Lexeme("BOOLEAN", left.type.equals(right.type));
+                    if (left.type.equals("NULL") && right.type.equals("NULL")) return new Lexeme("BOOLEAN", true);
+                    return new Lexeme("BOOLEAN", left == right);
                 }
             case "NOTEQUAL":
                 if (left.isInt()) {
                     return new Lexeme("BOOLEAN", left.intVal != right.intVal);
                 } else {
-                    return new Lexeme("BOOLEAN", !left.type.equals(right.type));
+                    if (left.type.equals("NULL") && right.type.equals("NULL")) return new Lexeme("BOOLEAN", false);
+                    return new Lexeme("BOOLEAN", left != right);
                 }
 
             default:

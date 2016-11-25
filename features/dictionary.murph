@@ -1,1 +1,65 @@
-print("Dictionary has not been implemented yet!");
+# Node Class
+func node(value, parent) {
+    let val = value;
+    let p = parent;
+    let l = null;
+    let r = null;
+    let lHeight = 0;
+    let rHeight = 0;
+    let height = 0;
+    return this;
+}
+
+# AVL Tree class
+func avl() {
+
+    let size = 0;
+    let root = null;
+
+    func insert(n) {
+        size = size + 1;
+
+        let new = node(n, null);
+
+        if (root == null) {
+            root = new;
+        } else {
+            let p = root;
+            while (p != null) {
+                new = node(n, p);
+                if (n < p.val) {
+                    if (p.l == null) {
+                        p.l = new;
+                        p.lHeight = 1;
+                        p = null;
+                    } else {
+                        p = p.l;
+                    }
+                } else {
+                    if (p.r == null) {
+                        p.r = new;
+                        p.rHeight = 1;
+                        p = null;
+                    } else {
+                        p = p.r;
+                    }
+                }
+            }
+        }
+    }
+
+    return this;
+}
+
+let n = node(5, node(4, null));
+n.height = n.height + 1;
+
+let tree = avl();
+tree.insert(5);
+tree.insert(6);
+tree.insert(3);
+tree.insert(4);
+println(tree.root.val);
+println(tree.root.l.val);
+println(tree.root.r.val);
+println(tree.root.l.r.val);
