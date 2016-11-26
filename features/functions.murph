@@ -14,7 +14,7 @@ println(alpha(32, 12));
 
 
 func lambdaTest(a, b) {
-    return func (a, b) {
+    return func () {
                return a + b;
            };
 }
@@ -23,3 +23,13 @@ println(lambdaTest(54, 66));
 
 let alpha = lambdaTest;
 println(alpha(15, 15));
+
+func a(val) {
+    return val;
+}
+
+func b(val) {
+    return val;
+}
+
+println(a(55) + b(45));
