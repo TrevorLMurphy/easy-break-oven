@@ -44,7 +44,7 @@ public class Parser {
             if (type.equals("SEMI")) {
                 System.out.println("Looks like you're missing a semicolon!");
             } else {
-                System.out.println("GOT " + type + "..." + "NEEDED " + lexeme.type);
+                System.out.println("GOT " + lexeme.type + "..." + "NEEDED " + type);
             }
             System.exit(0);
         }

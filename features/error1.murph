@@ -1,5 +1,4 @@
-func undefinedVariable() {
-    let variable = "I can't be accessed outside of this scope!";
+func newFunct2ion {
+    # Can't have numbers in function names :(
+    # Also, missing the parentheses :(
 }
-
-println(variable);
