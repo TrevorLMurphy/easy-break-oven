@@ -27,58 +27,58 @@ clean:
 
 # Tests
 error1:
-	cat features/error1.murph
+	cat features/error1.ebo
 error1x:
-	./dpl features/error1.murph
+	./dpl features/error1.ebo
 
 error2:
-	cat features/error2.murph
+	cat features/error2.ebo
 error2x:
-	./dpl features/error2.murph
+	./dpl features/error2.ebo
 
 error3:
-	cat features/error3.murph
+	cat features/error3.ebo
 error3x:
-	./dpl features/error3.murph
+	./dpl features/error3.ebo
 
 arrays:
-	cat features/arrays.murph
+	cat features/arrays.ebo
 arraysx:
-	./dpl features/arrays.murph
+	./dpl features/arrays.ebo
 
 conditionals:
-	cat features/conditionals.murph
+	cat features/conditionals.ebo
 conditionalsx:
-	./dpl features/conditionals.murph
+	./dpl features/conditionals.ebo
 
 operators:
-	cat features/operators.murph
+	cat features/operators.ebo
 operatorsx:
-	./dpl features/operators.murph
+	./dpl features/operators.ebo
 
 recursion:
-	cat features/recursion.murph
+	cat features/recursion.ebo
 recursionx:
-	./dpl features/recursion.murph
+	./dpl features/recursion.ebo
 
 iteration:
-	cat features/iteration.murph
+	cat features/iteration.ebo
 iterationx:
-	./dpl features/iteration.murph
+	./dpl features/iteration.ebo
 
 functions:
-	cat features/functions.murph
+	cat features/functions.ebo
 functionsx:
-	./dpl features/functions.murph
+	./dpl features/functions.ebo
 
 dictionary:
-	cat features/dictionary.murph
+	cat features/dictionary.ebo
 dictionaryx:
-	./dpl features/dictionary.murph
+	./dpl features/dictionary.ebo
 
 problem:
-	cat features/problem.murph
-execute = ./dpl features/problem.murph
+	cat features/problem.ebo
+execute = ./dpl features/problem.ebo
 problemx:
 	cat features/testInput0 | $(execute)
 problemx-1:
