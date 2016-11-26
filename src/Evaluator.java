@@ -82,6 +82,10 @@ public class Evaluator {
         }
     }
 
+    private Lexeme evalNeg(Lexeme eargs) {
+        return new Lexeme("INTEGER", -eargs.left.intVal);
+    }
+
     private Lexeme evalStatements(Lexeme tree, Lexeme env) {
         Lexeme statements = tree;
         Lexeme currentStatement = tree.left;
@@ -298,6 +302,8 @@ public class Evaluator {
         Lexeme args = tree.right;
         Lexeme eargs = evalArgs(args, env);
         switch (funcName) {
+            case "neg":
+                return evalNeg(eargs);
             case "print":
                 return evalPrint(eargs);
             case "println":

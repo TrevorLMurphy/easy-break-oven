@@ -1,5 +1,6 @@
 # Node Class
-func node(value, parent) {
+func node(key, value, parent) {
+    let key = key;
     let val = value;
     let p = parent;
     let l = null;
@@ -16,21 +17,217 @@ func avl() {
     let size = 0;
     let root = null;
 
-    func insert(n) {
+    func max(x, y) {
+        if (x > y) {
+            return x;
+        } else {
+            return y;
+        }
+    }
+
+    func setBalance(x) {
+        if (x.l == null) {
+            x.lHeight = 0;
+        } else {
+            let left = x.l;
+            x.lHeight = left.height;
+        }
+        if (x.r == null) {
+            x.rHeight = 0;
+        } else {
+            x.rHeight = x.r.height;
+        }
+        x.height = max(x.lHeight, x.rHeight) + 1;
+        let p = x.p;
+        if (p != null) {
+            if (isRight(x)) {
+                p.rHeight = x.height;
+            } else {
+                p.lHeight = 10;
+            }
+        }
+    }
+
+    func sibling(x) {
+        if (x == x.p.l) {
+            return x.p.r;
+        } else {
+            return x.p.l;
+        }
+    }
+
+    func bFactor(x) {
+        return x.lHeight - x.rHeight;
+    }
+
+    func isRight(x) {
+        return x == x.p.r;
+    }
+
+    func isLeft(x) {
+        return x == x.p.l;
+    }
+
+    func favorSibling(x) {
+        if (isRight(x)) {
+            if (bFactor(x.p) == 1) { return true; }
+            else if (bFactor(x.p) == neg(1)) {
+                return false;
+            } else { return false; }
+        } else {
+            if (bFactor(x.p) == 1) { return false; }
+            else if (bFactor(x.p) == neg(1)) {
+                return true;
+            } else { return false; }
+        }
+    }
+
+    func isBalanced(x) {
+        if (bFactor(x) == 1) {
+            return true;
+        } else if (bFactor(x) == neg(1)) {
+            return true;
+        } else if (bFactor(x) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    func favoriteChild(x) {
+        if (bFactor(x) == 1) {
+            return x.l;
+        } else if (bFactor(x) == neg(1)) {
+            return x.r;
+        } else {
+            return null;
+        }
+    }
+
+    func notLinear(p, x, y) {
+        if (p.r == x) {
+            if (x.r == y) {
+                return false;
+            }
+        } else if (p.l == x) {
+            if (x.l == y) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    func rotateYX(y, x) {
+        if (isLeft(y)) {
+            rotateRight(y, x);
+        } else {
+            rotateLeft(y, x);
+        }
+    }
+
+    func rotateYP(y, p) {
+        if (isLeft(y)) {
+            rotateRight(y, p);
+        } else {
+            rotateLeft(y, p);
+        }
+    }
+
+    func rotateXP(x, p) {
+        if (isRight(x)) {
+            rotateLeft(x, p);
+        } else {
+            rotateRight(x, p);
+        }
+    }
+
+    func rotateLeft(a, b) {
+        let left = a.l;
+        let p = b.p;
+        if (p == null) {
+            root = a;
+        } else {
+            if (isLeft(b)) {
+                p.l = a;
+            } else {
+                p.r = a;
+            }
+        }
+        a.l = b;
+        b.r = left;
+        if (left != null) {
+            left.p = b;
+        }
+        b.p = a;
+        a.p = p;
+    }
+
+    func rotateRight(a, b) {
+        let right = a.r;
+        let p = b.p;
+        if (p == null) {
+            root = a;
+        } else {
+            if (isLeft(b)) {
+                p.l = a;
+            } else {
+                p.r = a;
+            }
+        }
+        a.r = b;
+        b.l = right;
+        if (right != null) {
+            right.p = b;
+        }
+        b.p = a;
+        a.p = p;
+    }
+
+    func fix(x) {
+        while (x != root) {
+            if (favorSibling(x)) {
+                setBalance(x.p);
+                x = root;
+            } else if (isBalanced(x.p)) {
+                setBalance(x.p);
+                x = x.p;
+            } else {
+                let y = favoriteChild(x);
+                let p = x.p;
+                if (y != null) {
+                    if (notLinear(p, x, y)) {
+                        rotateYX(y, x);
+                        rotateYP(y, p);
+                        setBalance(x);
+                        setBalance(p);
+                        setBalance(y);
+                    }
+                } else {
+                    rotateXP(x, p);
+                    setBalance(p);
+                    setBalance(x);
+                }
+                x = root;
+            }
+        }
+    }
+
+    func insert(k, v) {
         size = size + 1;
 
-        let new = node(n, null);
+        let new = node(k, v, null);
 
         if (root == null) {
             root = new;
         } else {
             let p = root;
             while (p != null) {
-                new = node(n, p);
-                if (n < p.val) {
+                new = node(k, v, p);
+                if (n < p.key) {
                     if (p.l == null) {
                         p.l = new;
                         p.lHeight = 1;
+                        fix(p.l);
                         p = null;
                     } else {
                         p = p.l;
@@ -39,6 +236,7 @@ func avl() {
                     if (p.r == null) {
                         p.r = new;
                         p.rHeight = 1;
+                        fix(p.r);
                         p = null;
                     } else {
                         p = p.r;
@@ -48,18 +246,69 @@ func avl() {
         }
     }
 
+    func find(n) {
+        let p = root;
+        let a = null;
+        while (p != null) {
+            if (p.key == n) {
+                a = p.val;
+                p = null;
+            } else {
+                if (n < p.key) {
+                    p = p.l;
+                } else {
+                    p = p.r;
+                }
+            }
+        }
+        return a;
+    }
+
     return this;
 }
 
-let n = node(5, node(4, null));
-n.height = n.height + 1;
+#let tree = avl();
 
-let tree = avl();
-tree.insert(5);
-tree.insert(6);
+^
 tree.insert(3);
 tree.insert(4);
-println(tree.root.val);
-println(tree.root.l.val);
-println(tree.root.r.val);
-println(tree.root.l.r.val);
+tree.insert(5);
+tree.insert(1);
+tree.insert(12);
+tree.insert(55);
+tree.insert(6);
+tree.insert(90);
+tree.insert(122);
+tree.insert(54);
+tree.insert(32);
+tree.insert(15);
+tree.insert(905);
+tree.insert(67);
+tree.insert(322);
+tree.insert(78);
+tree.insert(45);
+tree.insert(46);
+tree.insert(47);
+tree.insert(48);
+println(tree.find(78));
+println(tree.find(90));
+println(tree.find(62));
+^
+
+func dictionary() {
+    let tree = avl();
+
+    func addItem(key, value) {
+        tree.insert(key, value);
+    }
+
+    func get(key) {
+        return tree.find(key);
+    }
+
+    return this;
+}
+
+let d = dictionary();
+d.addItem(23, "hello");
+println(d.get(23));

@@ -192,9 +192,9 @@ public class Lexer {
             case "while":
                 return new Lexeme("WHILE");
             case "true":
-                return new Lexeme("TRUE");
+                return new Lexeme("BOOLEAN" , true);
             case "false":
-                return new Lexeme("FALSE");
+                return new Lexeme("BOOLEAN", false);
             case "return":
                 return new Lexeme("RETURN");
             case "null":
