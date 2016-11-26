@@ -43,7 +43,7 @@ func avl() {
             if (isRight(x)) {
                 p.rHeight = x.height;
             } else {
-                p.lHeight = 10;
+                p.lHeight = x.height;
             }
         }
     }
@@ -223,7 +223,10 @@ func avl() {
             let p = root;
             while (p != null) {
                 new = node(k, v, p);
-                if (n < p.key) {
+                if (k == p.key) {
+                    p.val = v;
+                    p = null;
+                } else if (k < p.key) {
                     if (p.l == null) {
                         p.l = new;
                         p.lHeight = 1;
@@ -246,15 +249,15 @@ func avl() {
         }
     }
 
-    func find(n) {
+    func find(k) {
         let p = root;
         let a = null;
         while (p != null) {
-            if (p.key == n) {
+            if (p.key == k) {
                 a = p.val;
                 p = null;
             } else {
-                if (n < p.key) {
+                if (k < p.key) {
                     p = p.l;
                 } else {
                     p = p.r;
@@ -302,6 +305,14 @@ func dictionary() {
         tree.insert(key, value);
     }
 
+    func set(key, value) {
+        tree.insert(key, value);
+    }
+
+    func size() {
+        tree.size;
+    }
+
     func get(key) {
         return tree.find(key);
     }
@@ -310,5 +321,48 @@ func dictionary() {
 }
 
 let d = dictionary();
-d.addItem(23, "hello");
-println(d.get(23));
+d.addItem("key1", "hello");
+d.addItem("key2", "test2");
+d.addItem("key3", "test3");
+d.addItem("key4", "test2");
+d.addItem("key5", "hey");
+d.addItem("key6", "bye");
+d.addItem("key7", "okay");
+d.addItem("key8", "what?");
+d.addItem("key9", 54);
+d.addItem("key10", 90);
+d.addItem("key11", 12);
+
+println("Contents of dictionary...");
+println(d.get("key1"));
+println(d.get("key2"));
+println(d.get("key3"));
+println(d.get("key4"));
+println(d.get("key5"));
+println(d.get("key6"));
+println(d.get("key7"));
+println(d.get("key8"));
+println(d.get("key9"));
+println(d.get("key10"));
+println(d.get("key11"));
+
+println();
+
+print("Size of dictionary...");
+println(d.size());
+
+println();
+
+println("Change value of key3!");
+print("Key3's value is currently...");
+println(d.get("key3"));
+print("Key3's new value is now...");
+d.set("key3", "UPDATED");
+println(d.get("key3"));
+
+println("Change value of key10!");
+print("Key10's value is currently...");
+println(d.get("key10"));
+print("Key10's new value is now...");
+d.set("key10", 1000);
+println(d.get("key10"));

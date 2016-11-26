@@ -201,9 +201,15 @@ public class Evaluator {
             case "GEQUAL":
                 if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal >= right.intVal);
             case "GREATER":
-                if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal > right.intVal);
+                if (left.isInt())
+                    return new Lexeme("BOOLEAN", left.intVal > right.intVal);
+                if (left.isString())
+                    return new Lexeme("BOOLEAN", left.strVal.compareTo(right.strVal) < 0);
             case "LESS":
-                if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal < right.intVal);
+                if (left.isInt())
+                    return new Lexeme("BOOLEAN", left.intVal < right.intVal);
+                if (left.isString())
+                    return new Lexeme("BOOLEAN", left.strVal.compareTo(right.strVal) > 0);
             case "LEQUAL":
                 if (left.isInt()) return new Lexeme("BOOLEAN", left.intVal <= right.intVal);
             case "EQUAL":
