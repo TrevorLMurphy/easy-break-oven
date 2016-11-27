@@ -3,7 +3,7 @@ Easily broken.
 
 ## Types
 
-There are three types in the Easy Break Oven language:
+There are four types in the Easy Break Oven language:
 
 1. Strings
 2. Integers
