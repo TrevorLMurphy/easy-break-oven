@@ -1,4 +1,6 @@
-
+/**
+ * Lusth's environment model
+ */
 public class Environment {
 
     public Lexeme cons(String type, Lexeme carVal, Lexeme cdrVal) {

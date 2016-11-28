@@ -1,7 +1,7 @@
 let alpha = 50;
 let beta = 40;
 
-print("The next print will print 5 ...");
+print("The next print will print 5...");
 println(5);
 
 print("The next print will print 50, which is alpha...");

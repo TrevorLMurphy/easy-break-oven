@@ -4,7 +4,7 @@ func newFunction(a, b) {
     func nestedFunction() {
        return a + b;
     }
-    println("a + b is ...");
+    print("a + b is ...");
     return nestedFunction();
 }
 

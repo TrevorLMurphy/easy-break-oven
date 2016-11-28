@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Evaluate the source code statements
+ */
 public class Evaluator {
 
     private Environment e;
@@ -24,7 +27,6 @@ public class Evaluator {
             case "ARRAY": return tree;
             case "ARRAY_ACCESS": return evalArray(tree, env);
             case "VARIABLE": return e.lookupEnv(tree, env);
-            case "OPAREN": return eval(tree.right, env);
             case "PLUS":
             case "MINUS":
             case "MULT":
@@ -36,8 +38,6 @@ public class Evaluator {
             case "NOTEQUAL":
             case "RAISE":
             case "EQUAL": return evalOperator(tree, env);
-            case "AND": return evalAnd(tree, env);
-            case "OR": return evalOr(tree, env);
             case "ASSIGN": return evalVarAssign(tree, env);
             case "LET": return evalVarDef(tree, env);
             case "FUNCTION": return evalFuncDef(tree, env);
@@ -115,6 +115,7 @@ public class Evaluator {
         return (Lexeme) array.get(index);
     }
 
+    // Only used for the RPN calculator
     private Lexeme evalReadInput(Lexeme eargs) {
         if (eargs != null) {
             System.out.println("ERROR: READ DOES NOT TAKE ANY ARGUMENTS!");
@@ -234,14 +235,6 @@ public class Evaluator {
                 System.exit(0);
                 return null;
         }
-    }
-
-    private Lexeme evalAnd(Lexeme tree, Lexeme env) {
-        return null;
-    }
-
-    private Lexeme evalOr(Lexeme tree, Lexeme env) {
-        return null;
     }
 
     private Lexeme evalVarAssign(Lexeme tree, Lexeme env) {

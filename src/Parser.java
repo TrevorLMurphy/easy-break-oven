@@ -3,6 +3,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+/**
+ * Parse the language code
+ */
+
 public class Parser {
 
     private Lexeme lexeme;
@@ -22,6 +26,8 @@ public class Parser {
         advance();
         return statements();
     }
+
+    // Functions used to check to make sure the code is correct
 
     private boolean check(String type) {
         return lexeme.type.equals(type);
@@ -50,23 +56,73 @@ public class Parser {
         }
     }
 
-    private boolean varDefPending() {
-        return check("LET");
+    // Basically the main means of navigating the source code
+    private Lexeme statements() {
+        Lexeme tree = new Lexeme("STATEMENTS");
+        if (statementPending()) {
+            tree.left = statement();
+            tree.right = statements();
+        }
+        return tree;
     }
 
-    private boolean printPending() {
-        return check("PRINT");
+    // Represents the only statements available in the language
+    private Lexeme statement() {
+        Lexeme tree = new Lexeme("STATEMENT");
+        if (check("COMMENT")) {
+            tree.left = match("COMMENT");
+        } else if (varDefPending()) {
+            tree.left = varDef();
+            match("SEMI");
+        } else if (funcDefPending()) {
+            tree.left = functionDef();
+        } else if (ifPending()) {
+            tree.left = ifStatement();
+        } else if (varPending()) { // Need to also check for function and dot op
+            Lexeme temp = match("VARIABLE");
+            if (check("OPAREN")) {
+                tree.left = funcCall(temp);
+                match("SEMI");
+            } else if (check("DOT")) {
+                tree.left = dot(temp);
+                match("SEMI");
+            } else {
+                tree.left = varAssign(temp);
+                match("SEMI");
+            }
+        } else if (whilePending()) {
+            tree.left = whileLoop();
+        } else if (returnPending()) {
+            tree.left = returnStatement();
+            match("SEMI");
+        }
+        return tree;
     }
 
     private boolean statementPending() {
         return  expressionPending() || // This also handles func calls and var assigns
                 varDefPending() ||
-                printPending() ||
                 check("COMMENT") ||
                 ifPending() ||
                 whilePending() ||
                 funcDefPending() ||
                 returnPending();
+    }
+
+    private Lexeme varDef() {
+        Lexeme tree = match("LET");
+        tree.left = match("VARIABLE");
+        match("ASSIGN");
+        if (arrayPending()) {
+            tree.right = buildArray();
+        } else {
+            tree.right = expression();
+        }
+        return tree;
+    }
+
+    private boolean varDefPending() {
+        return check("LET");
     }
 
     private Lexeme block() {
@@ -194,47 +250,6 @@ public class Parser {
     private Lexeme returnStatement() {
         Lexeme tree = match("RETURN");
         tree.left = expression();
-        return tree;
-    }
-
-    private Lexeme statement() {
-        Lexeme tree = new Lexeme("STATEMENT");
-        if (check("COMMENT")) {
-            tree.left = match("COMMENT");
-        } else if (varDefPending()) {
-            tree.left = varDef();
-            match("SEMI");
-        } else if (funcDefPending()) {
-            tree.left = functionDef();
-        } else if (ifPending()) {
-            tree.left = ifStatement();
-        } else if (varPending()) {
-            Lexeme temp = match("VARIABLE");
-            if (check("OPAREN")) {
-                tree.left = funcCall(temp);
-                match("SEMI");
-            } else if (check("DOT")) {
-                tree.left = dot(temp);
-                match("SEMI");
-            } else {
-                tree.left = varAssign(temp);
-                match("SEMI");
-            }
-        } else if (whilePending()) {
-            tree.left = whileLoop();
-        } else if (returnPending()) {
-            tree.left = returnStatement();
-            match("SEMI");
-        }
-        return tree;
-    }
-
-    private Lexeme statements() {
-        Lexeme tree = new Lexeme("STATEMENTS");
-        if (statementPending()) {
-            tree.left = statement();
-            tree.right = statements();
-        }
         return tree;
     }
 
@@ -377,17 +392,5 @@ public class Parser {
             }
             match("COMMA");
         }
-    }
-
-    private Lexeme varDef() {
-        Lexeme tree = match("LET");
-        tree.left = match("VARIABLE");
-        match("ASSIGN");
-        if (arrayPending()) {
-            tree.right = buildArray();
-        } else {
-            tree.right = expression();
-        }
-        return tree;
     }
 }

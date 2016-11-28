@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.io.PushbackReader;
 
+/**
+ * Create Lexemes from the source code
+ */
 public class Lexer {
 
     private PushbackReader reader;
