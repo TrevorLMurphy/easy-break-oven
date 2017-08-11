@@ -1,5 +1,21 @@
 # Easy Break Oven
+
 Easily broken.
+
+## Running Code
+
+Executing `make all` will compile all the source files and allow you to run
+source code.
+
+A script has been provided that will run easy break oven source code.
+
+Just run something like:
+
+```
+./dpl yourcode.ebo
+```
+
+.ebo is the file extension for the easy break oven language
 
 ## Types
 
@@ -112,18 +128,6 @@ if (4 > 5) {
 
 *Keep in mind that if you string multiple operations together,
 the result will be right-associative.*
-
-## Running Code
-
-A script has been provided that will run easy break oven source code.
-
-Just run something like:
-
-```
-./dpl yourcode.ebo
-```
-
-.ebo is the file extension for the easy break oven language
 
 ## Yeah But Why Is It Called Easy Break Oven?
 
